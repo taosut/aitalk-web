@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+//enum PacketType {
+//    MSG = 0;
+//    TEAM = 1;
+//}
+//enum AttachStatus {
+//    DEF = 0; // 默认状态，未开始
+//    TRANSFERRING = 1; // 传输成功
+//    TRANSFERRED = 2; // 正在传输
+//    FAIL = 3; // 传输失败
+//    CANCEL = 4 ; // 传输取消
+//}
+//
+//enum MsgDirection {
+//    OUT = 0; // 发出去的消息
+//
+//    IN = 1; // 接收到的消息
+//}
+//enum MsgStatus {
+//
+//    DRAFT = 0; // 草稿
+//    SENDING = 1; // 正在发送中
+//    SUCCESS = 2; // 发送成功
+//    FAIL = 3; // 发送失败
+//    READ = 4; // 消息已读 发送消息时表示对方已看过该消息 接收消息时表示自己已读过，一般仅用于音频消息
+//    UNREAD = 5; // 未读状态
+//
+//}
+//
+//enum MsgType {
+//
+//    UNDEF = 0;
+//
+//    TEXT = 1;
+//
+//    IMAGE = 2;
+//
+//    AUDIO = 3;
+//
+//    VIDEO = 4;
+//
+//    LOCATION = 5;
+//
+//    FILE = 6;
+//
+//    AVCHAT = 7;
+//
+//    NOTIFICATION = 8;
+//
+//    TIP = 9;
+//
+//    ROBOT = 10;
+//
+//    CUSTOM = 11;
+//}
+//enum SessionType {
+//    NONE = 0;
+//    P2P = 1;
+//    TEAM = 2;
+//    SUPER_TEAM = 3;
+//    SYSTEM = 4;
+//    CHATROOM = 5;
+//}
+

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+// 连接相关操作
+//建立连接
+message Connect {
+  uint64 user_id = 1; // 用户唯一id
+  string device_id = 2; // 设备ID
+  string token = 3; // 用户token
+  uint32 platform = 4; //客户端平台 windows、mac、android、
+  string client_version = 5;
+}
+
+// 连接响应
+message ConnAck {
+  bool result = 1; // 包含sessionId
+  uint32 code = 2;
+  string info = 3;
+  uint32 expose = 4;
+}
+
+// 心跳请求
+message Ping {
+  string session_id = 1;
+}
+
+// 心跳响应
+message Pong {
+}
+
+// 断开连接
+message Disconnect {
+}

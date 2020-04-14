@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+//消息相关操作
+
+// 发送消息
+message MsgData {
+  uint64 from_id = 1; //消息发送方
+  uint64 to_id = 2; //消息接受方
+  string msg_id = 3; //消息id、由发送方生成,用于客户端存储，推荐前端使用uuid方式生成
+  uint32 session_type = 4; //会话类型
+  uint32 msg_direction = 6; // 消息方向
+  uint32 msg_status = 7; // 消息状态
+  string msg_attachStr = 8; // 消息附件json
+  uint32 msg_type = 9; // 消息附件
+  string content = 10; // 消息内容
+  uint32 from_client_type = 11; //客户端类型
+  uint32 time = 12; // 发送时间
+}
+
+// 发送消息确认
+message MsgDataAck {
+  uint64 from_id = 1; //发送此信令的用户id
+  uint64 to_id = 2;
+  uint32 session_type = 3; //会话类型
+  string msg_id = 4;
+}
+

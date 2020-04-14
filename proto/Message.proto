@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+import "PacketType.proto";
+import "Msg.proto";
+import "Connection.proto";
+import "Team.proto";
+
+//协议结构
+message Message {
+    //头部相关字段编号范围:1～10
+    uint64 magic = 1; //魔数
+    uint32 version = 2; // 版本号
+    PacketType packetType = 3; // 版本
+    uint64 seq = 4; //序列号
+    uint64 payloadLength = 5; // 负载长度
+    //    string sessionId = 6; //会话id
+    oneof payload {
+        // 连接相关字段编号范围:connection 11~20
+        Connect connect = 11;
+        ConnAck conn_ack = 12;
+        Ping ping = 13;
+        Pong pong = 14;
+        Disconnect disconnect = 15;
+
+        // 消息相关字段编号范围:Msg 21~50
+        MsgData msg_data = 21; //消息请求
+        MsgDataAck msg_data_ack = 22; //消息回执
+
+        // 群组相关字段编号范围:Team 51~
+        CreateTeamReq create_team_req = 51;
+        DismissTeamReq dismiss_team_req = 52;
+        QueryMemberListReq query_member_list_req = 53;
+    }
+
+}
+//// 消息头部
+//message Header {
+//    // 魔码，魔数
+//    uint32 magic = 1;
+//
+//    // 协议版本号
+//    uint32 version = 2;
+//
+//    // 控制报文类型
+//    uint32 packet_type = 3;
+//
+//    // payload数据包长度
+//    uint64 payload_length = 4;
+//
+//    // 序列号
+//    uint32 seq = 5;
+//
+//    // session id
+//    string session_id = 6;
+//
+//}

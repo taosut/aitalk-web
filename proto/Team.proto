@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+// 群组相关操作
+
+
+message CreateTeamReq {
+  uint32 time = 1;
+}
+
+message DismissTeamReq {
+  uint32 time = 1;
+
+}
+
+message QueryMemberListReq {
+  uint32 time = 1;
+
+}
