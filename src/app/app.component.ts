@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {ProtocolService} from './im/protocol.service';
 
 @Component({
   selector: 'aitalk-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'aitalk-web';
+
+  constructor(private protocolService: ProtocolService) {
+    protocolService.test();
+  }
 }

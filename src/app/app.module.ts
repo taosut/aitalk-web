@@ -3,7 +3,11 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ImModule} from './im/im.module';
+import {WebSocketModule} from './web-socket/web-socket.module';
+import {environment} from '../environments/environment';
+import {IMModule} from './im/im.module';
+
+export let seq = 0;
 
 @NgModule({
   declarations: [
@@ -12,10 +16,14 @@ import {ImModule} from './im/im.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ImModule
+    WebSocketModule.config(environment.ws),
+    IMModule.config(environment.im)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor() {
+    console.log(seq);
+  }
 }

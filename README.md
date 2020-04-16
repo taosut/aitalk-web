@@ -28,9 +28,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## 生成protobuf 文件到src/app/protocol/buffer
 protoc --proto_path=./proto --js_out=library=protos_lib,binary:src/app/im/lib ./proto/*.proto
-
-
- 
+protoc --proto_path=./proto --js_out=import_style=commonjs,binary:src/app/im/lib ./proto/*.proto
 
 
 

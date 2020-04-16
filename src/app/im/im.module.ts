@@ -1,14 +1,19 @@
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ProtocolService} from './protocol.service';
+import {IMConfig} from './im.config';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule
-  ],
-  providers: [ProtocolService]
+  ]
 })
-export class ImModule {
+export class IMModule {
+  public static config(imConfig: IMConfig): ModuleWithProviders {
+    return {
+      ngModule: IMModule,
+      providers: [{provide: IMConfig.CONFIG, useValue: imConfig}]
+    };
+  }
 }

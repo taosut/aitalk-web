@@ -2,8 +2,14 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {IMConfig} from '../app/im/im.config';
+import {WebSocketConfig} from '../app/web-socket/web-socket.config';
+
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: '',
+  ws: {url: 'ws://localhost:9666'} as WebSocketConfig,
+  im: {} as IMConfig
 };
 
 /*
