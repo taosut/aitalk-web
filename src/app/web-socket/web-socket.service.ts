@@ -3,32 +3,33 @@ import {WebSocketSubject, WebSocketSubjectConfig} from 'rxjs/internal-compatibil
 import {interval, Observable, Observer, Subject, SubscriptionLike} from 'rxjs';
 import {WebSocketConfig, webSocketConfig} from './web-socket.config';
 import {distinctUntilChanged, filter, map, share, takeWhile} from 'rxjs/operators';
+import MessageProtobuf from '../im/lib/Message_pb.js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService implements OnDestroy {
-  private config: WebSocketSubjectConfig<any>;
+  private readonly webSocketSubjectConfig: WebSocketSubjectConfig<MessageProtobuf>; // websocket配置
+  private readonly reconnectInterval: number; // 重连时间间隔
+  private readonly reconnectAttempts: number; // 重连次数
   private websocketSub: SubscriptionLike;
   private statusSub: SubscriptionLike;
   private reconnection$: Observable<number>;
   private websocket$: WebSocketSubject<any>;
   private connection$: Observer<boolean>;
   private wsMessages$: Subject<any>;
-  private reconnectInterval: number; // 重连时间间隔
-  private reconnectAttempts: number; // 重连次数
+
   private isConnected: boolean;
 
   public status: Observable<boolean>;
 
-  constructor(@Inject(webSocketConfig) private wsConfig: WebSocketConfig) {
+  constructor(@Inject(webSocketConfig) private config: WebSocketConfig) {
     this.wsMessages$ = new Subject<any>();
-
-    this.reconnectInterval = wsConfig.reconnectInterval || 5000; // pause between connections
-    this.reconnectAttempts = wsConfig.reconnectAttempts || 10; // number of connection attempts
-
-    this.config = {
-      url: wsConfig.url,
+    this.reconnectInterval = config.reconnectInterval || 5000; // 重连时间间隔
+    this.reconnectAttempts = config.reconnectAttempts || 10; // 重连次数
+    // 初始化websocket配置信息
+    this.webSocketSubjectConfig = {
+      url: config.url,
       closeObserver: {
         next: (event: CloseEvent) => {
           this.websocket$ = null;
@@ -43,12 +44,12 @@ export class WebSocketService implements OnDestroy {
       }
     };
 
-    // connection status
+    // 连接状态
     this.status = new Observable<boolean>((observer) => {
       this.connection$ = observer;
     }).pipe(share(), distinctUntilChanged());
 
-    // run reconnect if not connection
+    // 如果没有连接成功或为连接，重新连接
     this.statusSub = this.status
       .subscribe((isConnected) => {
         this.isConnected = isConnected;
@@ -65,26 +66,28 @@ export class WebSocketService implements OnDestroy {
     this.connect();
   }
 
-  /*
-     * connect to WebSocked
-     * */
+  /**
+   * 建立连接
+   */
   private connect(): void {
-    this.websocket$ = new WebSocketSubject(this.config);
+    console.log('==================connect');
+    this.websocket$ = new WebSocketSubject(this.webSocketSubjectConfig);
 
     this.websocket$.subscribe(
       (message) => this.wsMessages$.next(message),
       (error: Event) => {
         if (!this.websocket$) {
           // run reconnect if errors
+          console.log('==================2222');
           this.reconnect();
         }
       });
   }
 
 
-  /*
-  * reconnect if not connecting or errors
-  * */
+  /**
+   * 重连
+   */
   private reconnect(): void {
     this.reconnection$ = interval(this.reconnectInterval)
       .pipe(takeWhile((v, index) => index < this.reconnectAttempts && !this.websocket$));
@@ -104,9 +107,10 @@ export class WebSocketService implements OnDestroy {
   }
 
 
-  /*
-  * on message event
-  * */
+  /**
+   * 消息事件
+   * @param event 事件
+   */
   public on<T>(event: string): Observable<T> {
     if (event) {
       return this.wsMessages$.pipe(

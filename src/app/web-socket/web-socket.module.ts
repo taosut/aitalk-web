@@ -1,20 +1,21 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {WebTestSocketConfig} from './web-test-socket.config';
-
+import {CommonModule} from '@angular/common';
+import {WebSocketService} from './web-socket.service';
+import {webSocketConfig, WebSocketConfig} from './web-socket.config';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule
-  ]
+  ],
+  providers: [WebSocketService]
 })
 export class WebSocketModule {
-  public static config(wsConfig: WebTestSocketConfig): ModuleWithProviders {
+  public static config(config: WebSocketConfig): ModuleWithProviders {
     return {
       ngModule: WebSocketModule,
-      providers: [{ provide: WebTestSocketConfig.CONFIG, useValue: wsConfig }]
+      providers: [{provide: webSocketConfig, useValue: config}]
     };
   }
 

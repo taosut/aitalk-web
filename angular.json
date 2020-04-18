@@ -136,5 +136,8 @@
       }
     }
   },
-  "defaultProject": "aitalk-web"
+  "defaultProject": "aitalk-web",
+  "cli": {
+    "analytics": "6a90e7ca-d656-4d84-9588-cca856382683"
+  }
 }

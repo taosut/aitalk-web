@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {IMConfig} from './im.config';
+import {Inject, Injectable} from '@angular/core';
 import {PacketType} from './model/packet-type.enum';
-import messageProtobuf from './lib/Message_pb.js';
+import MessageProtobuf from './lib/Message_pb.js';
 import connectionProtobuf from './lib/Connection_pb.js';
 import msgProtobuf from './lib/Msg_pb.js';
 import packetTypeProtobuf from './lib/PacketType_pb.js';
+import {imConfig, IMConfig} from './im.config';
 // export const proto = require('./lib/Message_pb');
 // export const connection = require('./lib/Connection_pb');
 // export const msg = require('./lib/Msg_pb');
@@ -16,22 +16,29 @@ import packetTypeProtobuf from './lib/PacketType_pb.js';
   providedIn: 'root'
 })
 export class ProtocolService {
-  constructor() {
+
+  private readonly magic: number;
+  private readonly version: number;
+
+  constructor(@Inject(imConfig) private config: IMConfig) {
+
+    this.magic = config.magic;
+    this.version = config.version;
     console.log('=================');
   }
 
   test() {
     console.log('tset');
-    const message = new messageProtobuf.Message();
+    const message = new MessageProtobuf.Message();
     message.setMagic(1);
     console.log(message.getMagic());
   }
 
 
   public messageEncoder(data: any, packetTypeModel: PacketType): Uint8Array {
-    const message = new messageProtobuf.Message();
-    message.setMagic(IMConfig.MAGIC);
-    message.setVersion(IMConfig.VERSION);
+    const message = new MessageProtobuf.Message();
+    message.setMagic(this.magic);
+    message.setVersion(this.version);
     switch (packetTypeModel) {
       case PacketType.CONNECT:
         break;
@@ -58,7 +65,7 @@ export class ProtocolService {
   }
 
   public messageDecoder(data: Uint8Array): any {
-    return messageProtobuf.Message.deserialize(data);
+    return MessageProtobuf.Message.deserialize(data);
   }
 
 }

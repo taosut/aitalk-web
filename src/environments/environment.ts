@@ -9,7 +9,10 @@ export const environment = {
   production: false,
   apiUrl: '',
   ws: {url: 'ws://localhost:9666'} as WebSocketConfig,
-  im: {} as IMConfig
+  im: {
+    magic: 0xCAFEBABE, // 魔数
+    version: 1 // 版本号
+  } as IMConfig
 };
 
 /*
