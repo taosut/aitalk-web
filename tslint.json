@@ -55,8 +55,9 @@
         ]
       }
     ],
+    "no-debugger": false,
     "no-console": [
-      true,
+      false,
       "debug",
       "info",
       "time",

@@ -5,5 +5,5 @@ export interface WebSocketConfig {
   reconnectInterval?: number;
   reconnectAttempts?: number;
 }
-export const webSocketConfig: InjectionToken<string> = new InjectionToken('Websocket Configuration');
+export const webSocketConfiguration: InjectionToken<string> = new InjectionToken('Websocket Configuration');
 

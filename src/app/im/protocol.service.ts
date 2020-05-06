@@ -1,15 +1,10 @@
 import {Inject, Injectable} from '@angular/core';
 import {PacketType} from './model/packet-type.enum';
-import MessageProtobuf from './lib/Message_pb.js';
-import connectionProtobuf from './lib/Connection_pb.js';
-import msgProtobuf from './lib/Msg_pb.js';
-import packetTypeProtobuf from './lib/PacketType_pb.js';
-import {imConfig, IMConfig} from './im.config';
-// export const proto = require('./lib/Message_pb');
-// export const connection = require('./lib/Connection_pb');
-// export const msg = require('./lib/Msg_pb');
-// export const packetType = require('./lib/PacketType_pb');
-// export const team = require('./lib/Team_pb');
+import * as Message_pb from './lib/Message_pb.js';
+import * as Connection_pb from './lib/Connection_pb.js';
+import * as Msg_pb from './lib/Msg_pb.js';
+import * as PacketType_pb from './lib/PacketType_pb.js';
+import {imConfiguration, IMConfig} from './im.config';
 
 
 @Injectable({
@@ -20,29 +15,28 @@ export class ProtocolService {
   private readonly magic: number;
   private readonly version: number;
 
-  constructor(@Inject(imConfig) private config: IMConfig) {
+  constructor(@Inject(imConfiguration) private imConfig: IMConfig) {
 
-    this.magic = config.magic;
-    this.version = config.version;
-    console.log('=================');
-  }
-
-  test() {
-    console.log('tset');
-    const message = new MessageProtobuf.Message();
-    message.setMagic(1);
-    console.log(message.getMagic());
+    this.magic = imConfig.magic;
+    this.version = imConfig.version;
   }
 
 
-  public messageEncoder(data: any, packetTypeModel: PacketType): Uint8Array {
-    const message = new MessageProtobuf.Message();
+  public messageEncoder(payload: any, packetTypeModel: PacketType): Uint8Array {
+    const message = new Message_pb.Message();
     message.setMagic(this.magic);
     message.setVersion(this.version);
+    message.setSeq(1);
+    message.setPayloadlength(payload.serializeBinary().length);
     switch (packetTypeModel) {
       case PacketType.CONNECT:
+        message.setPackettype(PacketType_pb.PacketType.CONNECT);
+        message.setConnect(payload);
         break;
       case PacketType.CONN_ACK:
+        debugger;
+        message.setPackettype(PacketType_pb.PacketType.CONN_ACK);
+        message.setConnAck(payload);
         break;
       case PacketType.PING:
         break;
@@ -64,8 +58,8 @@ export class ProtocolService {
     return message.serializeBinary();
   }
 
-  public messageDecoder(data: Uint8Array): any {
-    return MessageProtobuf.Message.deserialize(data);
+  public messageDecoder(data: Uint8Array): Message_pb.Message {
+    return Message_pb.Message.deserializeBinary(data);
   }
 
 }

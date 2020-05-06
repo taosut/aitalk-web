@@ -7,7 +7,6 @@ import {WebSocketModule} from './web-socket/web-socket.module';
 import {environment} from '../environments/environment';
 import {IMModule} from './im/im.module';
 
-export let seq = 0;
 
 @NgModule({
   declarations: [
@@ -24,6 +23,6 @@ export let seq = 0;
 })
 export class AppModule {
   constructor() {
-    console.log(seq);
+    console.log('AiTalk web client is starting >>>>>');
   }
 }

@@ -5,6 +5,6 @@ export interface IMConfig {
   version: number; // 版本号
 }
 
-export const imConfig: InjectionToken<string> = new InjectionToken('IM Configuration');
+export const imConfiguration: InjectionToken<string> = new InjectionToken('IM Configuration');
 
 
