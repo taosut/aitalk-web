@@ -5,7 +5,7 @@ import {WebSocketConfig, webSocketConfiguration} from './web-socket.config';
 import {distinctUntilChanged, filter, map, share, takeWhile} from 'rxjs/operators';
 import {IMConfig, imConfiguration} from '../im/im.config';
 import {ProtocolService} from '../im/protocol.service';
-import {PacketType} from '../im/model/packet-type.enum';
+import {OpCode} from '../im/model/op-code.enum';
 import * as Connection_pb from '../im/lib/Connection_pb.js';
 import * as Message_pb from '../im/lib/Message_pb.js';
 
@@ -50,12 +50,12 @@ export class WebSocketService implements OnDestroy {
         next: (event: Event) => {
           console.debug('==========>WebSocket connected!');
           this.connection$.next(true);
-          const connect = new Connection_pb.Connect();
-          connect.setClientVersion('1');
-          connect.setDeviceId('1');
-          connect.setToken('1');
-          connect.setUserId(1);
-          this.send(connect, PacketType.CONNECT);
+          const auth = new Connection_pb.Auth();
+          auth.setClientVersion('1');
+          auth.setDeviceId('1');
+          auth.setToken('1');
+          auth.setUserId(1);
+          this.send(auth, OpCode.AUTH);
         }
       }
     };
@@ -144,11 +144,11 @@ export class WebSocketService implements OnDestroy {
   /**
    * 发送消息
    * @param payload 消息负载
-   * @param packetType 消息类型
+   * @param opCode 消息类型
    */
-  public send(payload: any = {}, packetType: PacketType): void {
+  public send(payload: any = {}, opCode: OpCode): void {
     if (!!payload && this.isConnected) {
-      this.websocket$.next(this.protocolService.messageEncoder(payload, packetType));
+      this.websocket$.next(this.protocolService.messageEncoder(payload, opCode));
     } else {
       console.error('Send error!');
     }

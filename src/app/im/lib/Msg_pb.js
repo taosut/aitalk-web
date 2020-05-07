@@ -89,7 +89,7 @@ proto.MsgData.prototype.toObject = function(opt_includeInstance) {
 proto.MsgData.toObject = function(includeInstance, msg) {
   var f, obj = {
     fromId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    toId: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    toId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     msgId: jspb.Message.getFieldWithDefault(msg, 3, ""),
     sessionType: jspb.Message.getFieldWithDefault(msg, 4, 0),
     msgDirection: jspb.Message.getFieldWithDefault(msg, 6, 0),
@@ -140,7 +140,7 @@ proto.MsgData.deserializeBinaryFromReader = function(msg, reader) {
       msg.setFromId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readString());
       msg.setToId(value);
       break;
     case 3:
@@ -216,8 +216,8 @@ proto.MsgData.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getToId();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (f.length > 0) {
+    writer.writeString(
       2,
       f
     );
@@ -307,20 +307,20 @@ proto.MsgData.prototype.setFromId = function(value) {
 
 
 /**
- * optional uint64 to_id = 2;
- * @return {number}
+ * optional string to_id = 2;
+ * @return {string}
  */
 proto.MsgData.prototype.getToId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.MsgData} returns this
  */
 proto.MsgData.prototype.setToId = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -519,7 +519,7 @@ proto.MsgDataAck.prototype.toObject = function(opt_includeInstance) {
 proto.MsgDataAck.toObject = function(includeInstance, msg) {
   var f, obj = {
     fromId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    toId: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    toId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     sessionType: jspb.Message.getFieldWithDefault(msg, 3, 0),
     msgId: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
@@ -563,7 +563,7 @@ proto.MsgDataAck.deserializeBinaryFromReader = function(msg, reader) {
       msg.setFromId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readString());
       msg.setToId(value);
       break;
     case 3:
@@ -611,8 +611,8 @@ proto.MsgDataAck.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getToId();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (f.length > 0) {
+    writer.writeString(
       2,
       f
     );
@@ -653,20 +653,20 @@ proto.MsgDataAck.prototype.setFromId = function(value) {
 
 
 /**
- * optional uint64 to_id = 2;
- * @return {number}
+ * optional string to_id = 2;
+ * @return {string}
  */
 proto.MsgDataAck.prototype.getToId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.MsgDataAck} returns this
  */
 proto.MsgDataAck.prototype.setToId = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

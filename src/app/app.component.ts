@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ProtocolService} from './im/protocol.service';
 import {WebSocketService} from './web-socket/web-socket.service';
-import {PacketType} from './im/model/packet-type.enum';
-import * as Connection_pb from './im/lib/Connection_pb';
+import {OpCode} from './im/model/op-code.enum';
+import * as Msg_pb from './im/lib/Msg_pb.js';
 import {Observable, Observer} from 'rxjs';
 
 @Component({
@@ -18,12 +18,11 @@ export class AppComponent implements OnInit {
   }
 
   send() {
-    const connect = new Connection_pb.Connect();
-    connect.setClientVersion('1');
-    connect.setDeviceId('1');
-    connect.setToken('1');
-    connect.setUserId(1);
-    this.wsService.send(connect, PacketType.CONNECT);
+    const msgData = new Msg_pb.MsgData();
+    msgData.setMsgId('1');
+    msgData.setToId('2');
+    msgData.setContent('我她妈的居然发了一条测试信息！');
+    this.wsService.send(msgData, OpCode.MSG_DATA);
   }
 
   ngOnInit() {

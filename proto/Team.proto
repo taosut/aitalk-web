@@ -1,18 +1,25 @@
 syntax = "proto3";
 
-// 群组相关操作
 
 
 message CreateTeamReq {
-  uint32 time = 1;
+    uint32 time = 1;
+    uint64 from_id = 2; //消息发送方
+    string teamName = 3; // 群名
 }
 
 message DismissTeamReq {
-  uint32 time = 1;
+    uint32 time = 1;
 
 }
 
 message QueryMemberListReq {
-  uint32 time = 1;
+    uint32 time = 1;
 
+}
+
+message JoinTeamReq {
+    uint32 time = 1;
+    uint64 from_id = 2; //消息发送方
+    string to_id = 3; //消息接受方
 }

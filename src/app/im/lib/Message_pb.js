@@ -12,8 +12,6 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
-var PacketType_pb = require('./PacketType_pb.js');
-goog.object.extend(proto, PacketType_pb);
 var Msg_pb = require('./Msg_pb.js');
 goog.object.extend(proto, Msg_pb);
 var Connection_pb = require('./Connection_pb.js');
@@ -52,15 +50,15 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.Message.oneofGroups_ = [[11,12,13,14,15,21,22,51,52,53]];
+proto.Message.oneofGroups_ = [[11,12,13,14,15,21,22,51,52,53,54]];
 
 /**
  * @enum {number}
  */
 proto.Message.PayloadCase = {
   PAYLOAD_NOT_SET: 0,
-  CONNECT: 11,
-  CONN_ACK: 12,
+  AUTH: 11,
+  AUTH_ACK: 12,
   PING: 13,
   PONG: 14,
   DISCONNECT: 15,
@@ -68,7 +66,8 @@ proto.Message.PayloadCase = {
   MSG_DATA_ACK: 22,
   CREATE_TEAM_REQ: 51,
   DISMISS_TEAM_REQ: 52,
-  QUERY_MEMBER_LIST_REQ: 53
+  QUERY_MEMBER_LIST_REQ: 53,
+  JOIN_TEAM_REQ: 54
 };
 
 /**
@@ -111,11 +110,11 @@ proto.Message.toObject = function(includeInstance, msg) {
   var f, obj = {
     magic: jspb.Message.getFieldWithDefault(msg, 1, 0),
     version: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    packettype: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    opcode: jspb.Message.getFieldWithDefault(msg, 3, 0),
     seq: jspb.Message.getFieldWithDefault(msg, 4, 0),
     payloadlength: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    connect: (f = msg.getConnect()) && Connection_pb.Connect.toObject(includeInstance, f),
-    connAck: (f = msg.getConnAck()) && Connection_pb.ConnAck.toObject(includeInstance, f),
+    auth: (f = msg.getAuth()) && Connection_pb.Auth.toObject(includeInstance, f),
+    authAck: (f = msg.getAuthAck()) && Connection_pb.AuthAck.toObject(includeInstance, f),
     ping: (f = msg.getPing()) && Connection_pb.Ping.toObject(includeInstance, f),
     pong: (f = msg.getPong()) && Connection_pb.Pong.toObject(includeInstance, f),
     disconnect: (f = msg.getDisconnect()) && Connection_pb.Disconnect.toObject(includeInstance, f),
@@ -123,7 +122,8 @@ proto.Message.toObject = function(includeInstance, msg) {
     msgDataAck: (f = msg.getMsgDataAck()) && Msg_pb.MsgDataAck.toObject(includeInstance, f),
     createTeamReq: (f = msg.getCreateTeamReq()) && Team_pb.CreateTeamReq.toObject(includeInstance, f),
     dismissTeamReq: (f = msg.getDismissTeamReq()) && Team_pb.DismissTeamReq.toObject(includeInstance, f),
-    queryMemberListReq: (f = msg.getQueryMemberListReq()) && Team_pb.QueryMemberListReq.toObject(includeInstance, f)
+    queryMemberListReq: (f = msg.getQueryMemberListReq()) && Team_pb.QueryMemberListReq.toObject(includeInstance, f),
+    joinTeamReq: (f = msg.getJoinTeamReq()) && Team_pb.JoinTeamReq.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -169,8 +169,8 @@ proto.Message.deserializeBinaryFromReader = function(msg, reader) {
       msg.setVersion(value);
       break;
     case 3:
-      var value = /** @type {!proto.PacketType} */ (reader.readEnum());
-      msg.setPackettype(value);
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setOpcode(value);
       break;
     case 4:
       var value = /** @type {number} */ (reader.readUint64());
@@ -181,14 +181,14 @@ proto.Message.deserializeBinaryFromReader = function(msg, reader) {
       msg.setPayloadlength(value);
       break;
     case 11:
-      var value = new Connection_pb.Connect;
-      reader.readMessage(value,Connection_pb.Connect.deserializeBinaryFromReader);
-      msg.setConnect(value);
+      var value = new Connection_pb.Auth;
+      reader.readMessage(value,Connection_pb.Auth.deserializeBinaryFromReader);
+      msg.setAuth(value);
       break;
     case 12:
-      var value = new Connection_pb.ConnAck;
-      reader.readMessage(value,Connection_pb.ConnAck.deserializeBinaryFromReader);
-      msg.setConnAck(value);
+      var value = new Connection_pb.AuthAck;
+      reader.readMessage(value,Connection_pb.AuthAck.deserializeBinaryFromReader);
+      msg.setAuthAck(value);
       break;
     case 13:
       var value = new Connection_pb.Ping;
@@ -229,6 +229,11 @@ proto.Message.deserializeBinaryFromReader = function(msg, reader) {
       var value = new Team_pb.QueryMemberListReq;
       reader.readMessage(value,Team_pb.QueryMemberListReq.deserializeBinaryFromReader);
       msg.setQueryMemberListReq(value);
+      break;
+    case 54:
+      var value = new Team_pb.JoinTeamReq;
+      reader.readMessage(value,Team_pb.JoinTeamReq.deserializeBinaryFromReader);
+      msg.setJoinTeamReq(value);
       break;
     default:
       reader.skipField();
@@ -273,9 +278,9 @@ proto.Message.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getPackettype();
-  if (f !== 0.0) {
-    writer.writeEnum(
+  f = message.getOpcode();
+  if (f !== 0) {
+    writer.writeUint32(
       3,
       f
     );
@@ -294,20 +299,20 @@ proto.Message.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getConnect();
+  f = message.getAuth();
   if (f != null) {
     writer.writeMessage(
       11,
       f,
-      Connection_pb.Connect.serializeBinaryToWriter
+      Connection_pb.Auth.serializeBinaryToWriter
     );
   }
-  f = message.getConnAck();
+  f = message.getAuthAck();
   if (f != null) {
     writer.writeMessage(
       12,
       f,
-      Connection_pb.ConnAck.serializeBinaryToWriter
+      Connection_pb.AuthAck.serializeBinaryToWriter
     );
   }
   f = message.getPing();
@@ -374,6 +379,14 @@ proto.Message.serializeBinaryToWriter = function(message, writer) {
       Team_pb.QueryMemberListReq.serializeBinaryToWriter
     );
   }
+  f = message.getJoinTeamReq();
+  if (f != null) {
+    writer.writeMessage(
+      54,
+      f,
+      Team_pb.JoinTeamReq.serializeBinaryToWriter
+    );
+  }
 };
 
 
@@ -414,20 +427,20 @@ proto.Message.prototype.setVersion = function(value) {
 
 
 /**
- * optional PacketType packetType = 3;
- * @return {!proto.PacketType}
+ * optional uint32 opCode = 3;
+ * @return {number}
  */
-proto.Message.prototype.getPackettype = function() {
-  return /** @type {!proto.PacketType} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+proto.Message.prototype.getOpcode = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /**
- * @param {!proto.PacketType} value
+ * @param {number} value
  * @return {!proto.Message} returns this
  */
-proto.Message.prototype.setPackettype = function(value) {
-  return jspb.Message.setProto3EnumField(this, 3, value);
+proto.Message.prototype.setOpcode = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -468,20 +481,20 @@ proto.Message.prototype.setPayloadlength = function(value) {
 
 
 /**
- * optional Connect connect = 11;
- * @return {?proto.Connect}
+ * optional Auth auth = 11;
+ * @return {?proto.Auth}
  */
-proto.Message.prototype.getConnect = function() {
-  return /** @type{?proto.Connect} */ (
-    jspb.Message.getWrapperField(this, Connection_pb.Connect, 11));
+proto.Message.prototype.getAuth = function() {
+  return /** @type{?proto.Auth} */ (
+    jspb.Message.getWrapperField(this, Connection_pb.Auth, 11));
 };
 
 
 /**
- * @param {?proto.Connect|undefined} value
+ * @param {?proto.Auth|undefined} value
  * @return {!proto.Message} returns this
 */
-proto.Message.prototype.setConnect = function(value) {
+proto.Message.prototype.setAuth = function(value) {
   return jspb.Message.setOneofWrapperField(this, 11, proto.Message.oneofGroups_[0], value);
 };
 
@@ -490,8 +503,8 @@ proto.Message.prototype.setConnect = function(value) {
  * Clears the message field making it undefined.
  * @return {!proto.Message} returns this
  */
-proto.Message.prototype.clearConnect = function() {
-  return this.setConnect(undefined);
+proto.Message.prototype.clearAuth = function() {
+  return this.setAuth(undefined);
 };
 
 
@@ -499,26 +512,26 @@ proto.Message.prototype.clearConnect = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.Message.prototype.hasConnect = function() {
+proto.Message.prototype.hasAuth = function() {
   return jspb.Message.getField(this, 11) != null;
 };
 
 
 /**
- * optional ConnAck conn_ack = 12;
- * @return {?proto.ConnAck}
+ * optional AuthAck auth_ack = 12;
+ * @return {?proto.AuthAck}
  */
-proto.Message.prototype.getConnAck = function() {
-  return /** @type{?proto.ConnAck} */ (
-    jspb.Message.getWrapperField(this, Connection_pb.ConnAck, 12));
+proto.Message.prototype.getAuthAck = function() {
+  return /** @type{?proto.AuthAck} */ (
+    jspb.Message.getWrapperField(this, Connection_pb.AuthAck, 12));
 };
 
 
 /**
- * @param {?proto.ConnAck|undefined} value
+ * @param {?proto.AuthAck|undefined} value
  * @return {!proto.Message} returns this
 */
-proto.Message.prototype.setConnAck = function(value) {
+proto.Message.prototype.setAuthAck = function(value) {
   return jspb.Message.setOneofWrapperField(this, 12, proto.Message.oneofGroups_[0], value);
 };
 
@@ -527,8 +540,8 @@ proto.Message.prototype.setConnAck = function(value) {
  * Clears the message field making it undefined.
  * @return {!proto.Message} returns this
  */
-proto.Message.prototype.clearConnAck = function() {
-  return this.setConnAck(undefined);
+proto.Message.prototype.clearAuthAck = function() {
+  return this.setAuthAck(undefined);
 };
 
 
@@ -536,7 +549,7 @@ proto.Message.prototype.clearConnAck = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.Message.prototype.hasConnAck = function() {
+proto.Message.prototype.hasAuthAck = function() {
   return jspb.Message.getField(this, 12) != null;
 };
 
@@ -834,6 +847,43 @@ proto.Message.prototype.clearQueryMemberListReq = function() {
  */
 proto.Message.prototype.hasQueryMemberListReq = function() {
   return jspb.Message.getField(this, 53) != null;
+};
+
+
+/**
+ * optional JoinTeamReq join_team_req = 54;
+ * @return {?proto.JoinTeamReq}
+ */
+proto.Message.prototype.getJoinTeamReq = function() {
+  return /** @type{?proto.JoinTeamReq} */ (
+    jspb.Message.getWrapperField(this, Team_pb.JoinTeamReq, 54));
+};
+
+
+/**
+ * @param {?proto.JoinTeamReq|undefined} value
+ * @return {!proto.Message} returns this
+*/
+proto.Message.prototype.setJoinTeamReq = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 54, proto.Message.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.Message} returns this
+ */
+proto.Message.prototype.clearJoinTeamReq = function() {
+  return this.setJoinTeamReq(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Message.prototype.hasJoinTeamReq = function() {
+  return jspb.Message.getField(this, 54) != null;
 };
 
 

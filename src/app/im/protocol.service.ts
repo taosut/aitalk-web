@@ -1,9 +1,8 @@
 import {Inject, Injectable} from '@angular/core';
-import {PacketType} from './model/packet-type.enum';
+import {OpCode} from './model/op-code.enum';
 import * as Message_pb from './lib/Message_pb.js';
 import * as Connection_pb from './lib/Connection_pb.js';
 import * as Msg_pb from './lib/Msg_pb.js';
-import * as PacketType_pb from './lib/PacketType_pb.js';
 import {imConfiguration, IMConfig} from './im.config';
 
 
@@ -22,37 +21,37 @@ export class ProtocolService {
   }
 
 
-  public messageEncoder(payload: any, packetTypeModel: PacketType): Uint8Array {
+  public messageEncoder(payload: any, opCode: OpCode): Uint8Array {
     const message = new Message_pb.Message();
     message.setMagic(this.magic);
     message.setVersion(this.version);
     message.setSeq(1);
     message.setPayloadlength(payload.serializeBinary().length);
-    switch (packetTypeModel) {
-      case PacketType.CONNECT:
-        message.setPackettype(PacketType_pb.PacketType.CONNECT);
-        message.setConnect(payload);
+    switch (opCode) {
+      case OpCode.AUTH:
+        message.setOpcode(OpCode.AUTH.valueOf());
+        message.setAuth(payload);
         break;
-      case PacketType.CONN_ACK:
+      case OpCode.AUTH_ACK:
         debugger;
-        message.setPackettype(PacketType_pb.PacketType.CONN_ACK);
-        message.setConnAck(payload);
+        message.setOpcode(OpCode.AUTH_ACK.valueOf());
+        message.setAuthAck(payload);
         break;
-      case PacketType.PING:
+      case OpCode.PING:
         break;
-      case PacketType.PONG:
+      case OpCode.PONG:
         break;
-      case PacketType.DISCONNECT:
+      case OpCode.DISCONNECT:
         break;
-      case PacketType.MSG_DATA:
+      case OpCode.MSG_DATA:
         break;
-      case PacketType.MSG_DATA_ACK:
+      case OpCode.MSG_DATA_ACK:
         break;
-      case PacketType.CREATE_TEAM_REQ:
+      case OpCode.CREATE_TEAM_REQ:
         break;
-      case PacketType.DISMISS_TEAM_REQ:
+      case OpCode.DISMISS_TEAM_REQ:
         break;
-      case PacketType.QUERY_MEMBER_LIST_REQ:
+      case OpCode.QUERY_MEMBER_LIST_REQ:
         break;
     }
     return message.serializeBinary();

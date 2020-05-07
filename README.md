@@ -32,3 +32,4 @@ protoc --proto_path=./proto --js_out=import_style=commonjs,binary:src/app/im/lib
 
 #todo: 发版前修改tslint
 
+

@@ -1,6 +1,6 @@
-export enum PacketType {
-  CONNECT = 0,
-  CONN_ACK = 1,
+export enum OpCode {
+  AUTH = 0,
+  AUTH_ACK = 1,
   PING = 2,
   PONG = 3,
   DISCONNECT = 4,
