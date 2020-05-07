@@ -33,7 +33,6 @@ export class ProtocolService {
         message.setAuth(payload);
         break;
       case OpCode.AUTH_ACK:
-        debugger;
         message.setOpcode(OpCode.AUTH_ACK.valueOf());
         message.setAuthAck(payload);
         break;

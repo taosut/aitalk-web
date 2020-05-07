@@ -50,6 +50,7 @@ export class WebSocketService implements OnDestroy {
         next: (event: Event) => {
           console.debug('==========>WebSocket connected!');
           this.connection$.next(true);
+          // todo:发送认证请求，放在这个地方不是太合适
           const auth = new Connection_pb.Auth();
           auth.setClientVersion('1');
           auth.setDeviceId('1');
