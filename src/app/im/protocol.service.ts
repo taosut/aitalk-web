@@ -44,6 +44,8 @@ export class ProtocolService {
       case OpCode.DISCONNECT:
         break;
       case OpCode.MSG_DATA:
+        message.setOpcode(OpCode.MSG_DATA.valueOf());
+        message.setMsgData(payload);
         break;
       case OpCode.MSG_DATA_ACK:
         break;

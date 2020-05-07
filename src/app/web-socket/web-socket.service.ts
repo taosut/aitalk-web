@@ -144,7 +144,7 @@ export class WebSocketService implements OnDestroy {
   /**
    * 发送消息
    * @param payload 消息负载
-   * @param opCode 消息类型
+   * @param opCode 操作码
    */
   public send(payload: any = {}, opCode: OpCode): void {
     if (!!payload && this.isConnected) {

@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   }
 
   send() {
+    debugger;
     const msgData = new Msg_pb.MsgData();
     msgData.setMsgId('1');
     msgData.setToId('2');
